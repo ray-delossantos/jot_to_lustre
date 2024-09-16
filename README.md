@@ -13,16 +13,14 @@ import jot_to_lustre
 
 pub fn main() {
     let jot_body = "
-    
-    # A heading that
-    # takes up
-    # three lines
+# A heading that
+# takes up
+# three lines
 
-    {.important .large}
-    A paragraph, finally
+{.important .large}
+A paragraph, finally
 
-    [My link text](http://example.com)
-
+[My link text](http://example.com)
     "
 
     io.debug(
