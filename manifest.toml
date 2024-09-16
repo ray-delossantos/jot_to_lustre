@@ -16,4 +16,4 @@ packages = [
 gleam_stdlib = { version = ">= 0.34.0 and < 2.0.0" }
 gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
 jot = { version = ">= 1.0.2 and < 2.0.0" }
-lustre = { version = ">= 4.4.3 and < 5.0.0" }
+lustre = { version = ">= 4.4.1 and < 5.0.0" }

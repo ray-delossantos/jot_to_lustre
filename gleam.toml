@@ -13,7 +13,7 @@ links = [
 [dependencies]
 gleam_stdlib = ">= 0.34.0 and < 2.0.0"
 jot = ">= 1.0.2 and < 2.0.0"
-lustre = ">= 4.4.3 and < 5.0.0"
+lustre = ">= 4.4.1 and < 5.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
