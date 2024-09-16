@@ -1,5 +1,5 @@
 name = "jot_to_lustre"
-version = "0.1.0"
+version = "1.0.0"
 description = "Convert jot documents or strings to lustre/element/html elements"
 licences = ["Apache-2.0"]
 
