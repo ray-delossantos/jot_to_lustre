@@ -1,0 +1,19 @@
+name = "jot_to_lustre"
+version = "0.1.0"
+description = "Convert jot documents or strings to lustre/element/html elements"
+licences = ["Apache-2.0"]
+
+repository = { type = "github", user = "ray-delossantos", repo = "jot_to_lustre" }
+
+links = [
+  { title = "Website", href = "https://gleam.run" },
+  { title = "Sponsor", href = "https://github.com/sponsors/ray-delossantos" },
+]
+
+[dependencies]
+gleam_stdlib = ">= 0.34.0 and < 2.0.0"
+jot = ">= 1.0.2 and < 2.0.0"
+lustre = ">= 4.4.3 and < 5.0.0"
+
+[dev-dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"
