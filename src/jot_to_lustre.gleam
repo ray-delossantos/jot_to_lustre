@@ -10,12 +10,15 @@ import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
 
+/// Convert a string of Djot into lustre html elements.
 pub fn to_lustre(djot: String) {
   djot
   |> parse
   |> document_to_lustre
 }
 
+/// Convert a Djot document (normally comes from the parse fn)
+/// into lustre html elements.
 pub fn document_to_lustre(document: Document) {
   list.reverse(containers_to_lustre(document.content, [element.none()]))
 }
