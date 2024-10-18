@@ -3,12 +3,16 @@ import gleam/list
 import gleam/option.{None, Some}
 import gleam/string
 import jot.{
-  type Container, type Document, type Inline, Code, Codeblock, Emphasis, Heading,
-  Image, Linebreak, Link, Paragraph, Strong, Text, Url, parse,
+  type Container, type Destination, type Document, type Inline, Code, Codeblock,
+  Emphasis, Heading, Image, Linebreak, Link, Paragraph, Reference, Strong, Text,
+  Url, parse,
 }
 import lustre/attribute
 import lustre/element.{type Element}
 import lustre/element/html
+
+type Refs =
+  Dict(String, String)
 
 /// Convert a string of Djot into lustre html elements.
 pub fn to_lustre(djot: String) {
@@ -20,58 +24,68 @@ pub fn to_lustre(djot: String) {
 /// Convert a Djot document (normally comes from the parse fn)
 /// into lustre html elements.
 pub fn document_to_lustre(document: Document) {
-  list.reverse(containers_to_lustre(document.content, [element.none()]))
+  list.reverse(
+    containers_to_lustre(document.content, document.references, [element.none()]),
+  )
 }
 
 fn containers_to_lustre(
   containers: List(Container),
+  refs: Refs,
   elements: List(Element(msg)),
 ) {
   case containers {
     [] -> elements
     [container, ..rest] -> {
-      let elements = container_to_lustre(elements, container)
-      containers_to_lustre(rest, elements)
+      let elements = container_to_lustre(elements, container, refs)
+      containers_to_lustre(rest, refs, elements)
     }
   }
 }
 
-fn container_to_lustre(elements: List(Element(msg)), container: Container) {
+fn container_to_lustre(
+  elements: List(Element(msg)),
+  container: Container,
+  refs: Refs,
+) {
   let element = case container {
     Paragraph(attrs, inlines) -> {
-      html.p(attributes_to_lustre(attrs, []), inlines_to_lustre([], inlines))
+      html.p(
+        attributes_to_lustre(attrs, []),
+        inlines_to_lustre([], inlines, refs),
+      )
     }
     Heading(attrs, level, inlines) -> {
       case level {
         1 ->
           html.h1(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
         2 ->
           html.h2(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
         3 ->
           html.h3(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
         4 ->
           html.h4(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
         5 ->
           html.h5(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
         _ ->
           html.h6(
             attributes_to_lustre(attrs, []),
-            inlines_to_lustre([], inlines),
+            inlines_to_lustre([], inlines, refs),
           )
       }
     }
@@ -90,47 +104,47 @@ fn container_to_lustre(elements: List(Element(msg)), container: Container) {
   [element, ..elements]
 }
 
-fn inlines_to_lustre(elements: List(Element(msg)), inlines: List(Inline)) {
+fn inlines_to_lustre(
+  elements: List(Element(msg)),
+  inlines: List(Inline),
+  refs: Refs,
+) {
   case inlines {
     [] -> elements
     [inline, ..rest] -> {
       elements
-      |> inline_to_lustre(inline)
-      |> inlines_to_lustre(rest)
+      |> inline_to_lustre(inline, refs)
+      |> inlines_to_lustre(rest, refs)
     }
   }
 }
 
-fn inline_to_lustre(elements: List(Element(msg)), inline: Inline) {
+fn inline_to_lustre(
+  elements: List(Element(msg)),
+  inline: Inline,
+  refs: Dict(String, String),
+) {
   case inline {
     Linebreak -> [html.br([])]
     Text(text) -> [html.text(text)]
     Strong(inlines) -> {
-      [html.strong([], inlines_to_lustre(elements, inlines))]
+      [html.strong([], inlines_to_lustre(elements, inlines, refs))]
     }
     Emphasis(inlines) -> {
-      [html.em([], inlines_to_lustre(elements, inlines))]
+      [html.em([], inlines_to_lustre(elements, inlines, refs))]
     }
     Link(text, destination) -> {
       [
         html.a(
-          [
-            attribute.href(case destination {
-              Url(url) -> url
-              _ -> ""
-            }),
-          ],
-          inlines_to_lustre(elements, text),
+          [attribute.href(destination_attribute(destination, refs))],
+          inlines_to_lustre(elements, text, refs),
         ),
       ]
     }
     Image(text, destination) -> {
       [
         html.img([
-          attribute.src(case destination {
-            Url(url) -> url
-            _ -> ""
-          }),
+          attribute.src(destination_attribute(destination, refs)),
           attribute.alt(take_inline_text(text, "")),
         ]),
       ]
@@ -138,6 +152,17 @@ fn inline_to_lustre(elements: List(Element(msg)), inline: Inline) {
     Code(content) -> {
       [html.code([], [html.text(content)])]
     }
+  }
+}
+
+fn destination_attribute(destination: Destination, refs: Refs) {
+  case destination {
+    Url(url) -> url
+    Reference(id) ->
+      case dict.get(refs, id) {
+        Ok(url) -> url
+        Error(Nil) -> ""
+      }
   }
 }
 

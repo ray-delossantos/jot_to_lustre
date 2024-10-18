@@ -1,5 +1,5 @@
 name = "jot_to_lustre"
-version = "1.0.1"
+version = "1.1.0"
 description = "Convert jot documents or strings to lustre/element/html elements"
 licences = ["Apache-2.0"]
 
@@ -17,3 +17,4 @@ lustre = ">= 4.4.1 and < 5.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+birdie = ">= 1.2.3 and < 2.0.0"

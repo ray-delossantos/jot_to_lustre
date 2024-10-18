@@ -1,10 +1,9 @@
-import gleam/io
+import birdie
+import gleam/list
+import gleam/string
 import gleeunit
-import gleeunit/should
-import lustre/attribute
-import lustre/element/html
-
 import jot_to_lustre.{to_lustre}
+import lustre/element
 
 pub fn main() {
   gleeunit.main()
@@ -21,19 +20,16 @@ pub fn jot_to_lustre_test() {
 A paragraph, finally
 
 [My link text](http://example.com)
+
+[foo bar]: http://example.com?foo_bar=1
+
+[My link text 2][foo bar]
+
 "
-  io.debug(to_lustre(jot_body))
-  to_lustre(jot_body)
-  |> should.equal([
-    html.text(""),
-    html.h1([attribute.id("A-heading-that-takes-up-three-lines")], [
-      html.text("A heading that\ntakes up\nthree lines"),
-    ]),
-    html.p([attribute.class("important large")], [
-      html.text("A paragraph, finally"),
-    ]),
-    html.p([], [
-      html.a([attribute.href("http://example.com")], [html.text("My link text")]),
-    ]),
-  ])
+
+  jot_body
+  |> to_lustre
+  |> list.map(fn(element) { element.to_string(element) })
+  |> list.fold("", string.append)
+  |> birdie.snap(title: "jot_to_lustre_test_djot")
 }
