@@ -29,7 +29,7 @@ A paragraph, finally
 
   jot_body
   |> to_lustre
-  |> list.map(fn(element) { element.to_string(element) })
+  |> list.map(element.to_string)
   |> list.fold("", string.append)
   |> birdie.snap(title: "jot_to_lustre_test_djot")
 }
