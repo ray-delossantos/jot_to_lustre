@@ -3,7 +3,7 @@
 [![Package Version](https://img.shields.io/hexpm/v/jotkey)](https://hex.pm/packages/jotkey)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/jotkey/)
 
-Tiny library for "translating" djot syntax to lustre elements. Can covnert to other renderers
+Tiny library for "translating" djot syntax to lustre elements. Can convert to other renderers
 
 > [!TIP]
 > This is a fork from https://hexdocs.pm/lustre_ssg/lustre/ssg/djot.html. If using lustre ssg 
