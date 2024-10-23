@@ -1,22 +1,23 @@
-# jot_to_lustre
+# jotkey
 
-[![Package Version](https://img.shields.io/hexpm/v/jot_to_lustre)](https://hex.pm/packages/jot_to_lustre)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/jot_to_lustre/)
+[![Package Version](https://img.shields.io/hexpm/v/jotkey)](https://hex.pm/packages/jotkey)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/jotkey/)
 
-Tiny library for "translating" djot syntax to lustre elements
+Tiny library for "translating" djot syntax to lustre elements. Can covnert to other renderers
 
 > [!TIP]
 >
-> I'll recommend to use this (https://hexdocs.pm/lustre_ssg/lustre/ssg/djot.html) instead.
-> jot_to_lustre library has a very tiny purpose for experimantal work that I have in a discovery phase.
+> This is a fork from (https://hexdocs.pm/lustre_ssg/lustre/ssg/djot.html). If using lustre ssg 
+> I'll recommend to not use this library if context aware systems are not needed.
 
 ```sh
-gleam add jot_to_lustre
+gleam add jotkey
 ```
 ```gleam
 import gleam/io
 import lustre/element/html
-import jot_to_lustre
+import jotkey
+import jot
 
 pub fn main() {
     let jot_body = "
@@ -31,12 +32,16 @@ A paragraph, finally
     "
 
     io.debug(
-        html.body([], jot_to_lustre.to_lustre(jot_body)
+        html.body([], 
+            jot_body 
+            |> jot.parse
+            |> jotkey.render(jotkey.default_renderer(), [])
     )
+
 }
 ```
 
-Further documentation can be found at <https://hexdocs.pm/jot_to_lustre>.
+Further documentation can be found at <https://hexdocs.pm/jotkey>.
 
 ## Development
 

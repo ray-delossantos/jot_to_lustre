@@ -1,9 +1,9 @@
-name = "jot_to_lustre"
-version = "1.1.0"
-description = "Convert jot documents or strings to lustre/element/html elements"
+name = "jotkey"
+version = "2.0.0"
+description = "Convert jot documents to lustre elements. Can convert to custom renderers"
 licences = ["Apache-2.0"]
 
-repository = { type = "github", user = "ray-delossantos", repo = "jot_to_lustre" }
+repository = { type = "github", user = "ray-delossantos", repo = "jotkey" }
 
 links = [
   { title = "Website", href = "https://gleam.run" },
