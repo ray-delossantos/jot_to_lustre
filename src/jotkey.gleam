@@ -12,7 +12,7 @@ import lustre/element/html
 
 // TYPES -----------------------------------------------------------------------
 
-/// A renderer for a djot document knows how to turn each block or inline element
+/// A renderer for a djot document, knows how to turn each block or inline element
 /// into some custom view. That view could be anything, but it's typically a
 /// Lustre element.
 ///
@@ -25,6 +25,8 @@ import lustre/element/html
 ///
 /// This renderer is compatible with **v1.0.2** of the [jot](https://hexdocs.pm/jot/jot.html)
 /// package.
+/// 
+/// For more advanced usage check examples implementing context aware renderers
 ///
 pub type Renderer(view, context) {
   Renderer(
